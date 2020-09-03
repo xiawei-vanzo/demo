@@ -1,0 +1,19 @@
+MediaPlayer player = MediaPlayer.create(context,Uri.fromFile(new File(filePath)));
+            if(player.getDuration() > 3000) {
+                if (isImpFile) {
+                    filePath = AirStorageManager.signFile(filePath);
+                    isImpFile = false;
+                }
+                AirStorageManager.scanFile(context, filePath);
+                if (videoRecordCallback != null) {
+                    videoRecordCallback.onVideoSaveComplete(filePath);
+                }
+                if (captureOnce) {
+                    stopPreview();
+                }
+            } else {
+                AirStorageManager.deleteFileGetSize(filePath);
+                if (videoRecordCallback != null) {
+                    videoRecordCallback.onVideoSaveCancel();
+                }
+            }
